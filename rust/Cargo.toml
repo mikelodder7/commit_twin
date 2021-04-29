@@ -1,0 +1,17 @@
+[package]
+name = "commit-twin"
+version = "0.1.0"
+authors = ["Michael Lodder <redmike7@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+bls12_381_plus = "0.4"
+curve25519-dalek = "3.1"
+ff = "0.9"
+group = "0.9"
+rand_core = "0.6"
+rand_xorshift = "0.3"
+rand_core5 = { version = "0.5", package = "rand_core" }
+rand_xorshift2 = { version = "0.2", package = "rand_xorshift" }
+sha2 = "0.9"
+subtle = "2.2"
