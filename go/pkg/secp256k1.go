@@ -7,10 +7,7 @@ import (
 	"math/big"
 )
 
-var (
-	nothingUpMySleeveQ1 = []byte("Cowards die many times before their deaths; The valiant never taste of death but once")
-	nothingUpMySleeveQ2 = []byte("Men at some time are masters of their fates")
-)
+
 
 type Commitment struct {
 	X *big.Int
@@ -27,14 +24,7 @@ func NewCommitment(x, r, otherx, othery *big.Int) *Commitment {
 	}
 }
 
-type EqProof struct {
-	C *big.Int
-	D *big.Int
-	D1 *big.Int
-	D2 *big.Int
-}
-
-func NewEqProof(
+func NewEqProofK256(
 	x, r1, r2, nonce *big.Int,
 	) *EqProof {
 	curve := btcec.S256()
@@ -51,7 +41,7 @@ func NewEqProof(
 	w2x2, w2y2 := curve.ScalarMult(q2x, q2y, n2.Bytes())
 	w2x, w2y := curve.Add(w1x1, w1y1, w2x2, w2y2)
 
-	hasher := sha512.New()
+	hasher := sha512.New384()
 	_, _ = hasher.Write(w1x.Bytes())
 	_, _ = hasher.Write(w1y.Bytes())
 	_, _ = hasher.Write(w2x.Bytes())
@@ -75,7 +65,7 @@ func NewEqProof(
 	}
 }
 
-func (eq *EqProof) Open(b, c *Commitment, nonce *big.Int) bool {
+func (eq *EqProof) OpenK256(b, c *Commitment, nonce *big.Int) bool {
 	curve := btcec.S256()
 	q1x, q1y, q2x, q2y := getGenerators()
 
@@ -90,7 +80,7 @@ func (eq *EqProof) Open(b, c *Commitment, nonce *big.Int) bool {
 	rhsx1, rhsy1 = curve.Add(dx, dy, rhsx1, rhsy1)
 	rhsx, rhsy := curve.Add(rhsx2, rhsy2, rhsx1, rhsy1)
 
-	hasher := sha512.New()
+	hasher := sha512.New384()
 	_, _ = hasher.Write(lhsx.Bytes())
 	_, _ = hasher.Write(lhsy.Bytes())
 	_, _ = hasher.Write(rhsx.Bytes())
